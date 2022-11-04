@@ -60,7 +60,8 @@ class TextBox():
             for i in range(len(word)-1, -1, -1):
                 ord = word[i]
                 dim = MAX_DIM * (i + 2) / letter_spacing * multiplier
-                arc(WIDTH/2 - offset + spacing + total_dim/2, HEIGHT/2, dim, dim, -PI/2 + ord * PI/13 + GAP_SIZE/2, 3*PI/2 + ord * PI/13 - GAP_SIZE/2)
+                gap_size = GAP_SIZE * 2 / (i + 2)
+                arc(WIDTH/2 - offset + spacing + total_dim/2, HEIGHT/2, dim, dim, -PI/2 + ord * PI/13 + gap_size/2, 3*PI/2 + ord * PI/13 - gap_size/2)
             spacing += total_dim + word_spacing * multiplier
 
 textbox = TextBox(WIDTH/2, HEIGHT - FONT_SIZE)

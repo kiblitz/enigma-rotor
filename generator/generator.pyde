@@ -48,17 +48,20 @@ class TextBox():
 
         strokeCap(SQUARE)
         max_len = max([len(word) for word in self.ords])
+        letter_spacing = max_len + 1
         max_dim = MAX_DIM
         word_spacing = max_dim * WORD_SPACING_RATIO
-        total_space = len(self.ords) * max_dim + (len(self.ords) - 1) * word_spacing
-        offset = total_space / 2 - max_dim / 2
-        for wi, word in enumerate(self.ords):
-            letter_spacing = max_len + 1
+        total_space = sum([max_dim * (len(word) + 1) / letter_spacing + word_spacing for word in self.ords]) - word_spacing
+        offset = total_space / 2
+        spacing = 0
+        for word in self.ords:
             strokeWeight(4. / letter_spacing * STROKE * max_dim / MAX_DIM)
+            total_dim = max_dim * (len(word) + 1) / letter_spacing
             for i in range(len(word)-1, -1, -1):
                 ord = word[i]
                 dim = max_dim * (i + 2) / letter_spacing
-                arc(WIDTH/2 - offset + wi * (max_dim + word_spacing), HEIGHT/2, dim, dim, -PI/2 + ord * PI/13 + GAP_SIZE/2, 3*PI/2 + ord * PI/13 - GAP_SIZE/2)
+                arc(WIDTH/2 - offset + spacing + total_dim/2, HEIGHT/2, dim, dim, -PI/2 + ord * PI/13 + GAP_SIZE/2, 3*PI/2 + ord * PI/13 - GAP_SIZE/2)
+            spacing += total_dim + word_spacing
 
 textbox = TextBox(WIDTH/2, HEIGHT - FONT_SIZE)
 

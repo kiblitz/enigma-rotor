@@ -5,9 +5,9 @@ HEIGHT = 600
 FONT_SIZE = 20
 GAP_SIZE = PI/10
 
-MAX_DIM = 300
-WORD_SPACING_RATIO = 0.25
-STROKE = 20
+MAX_DIM = 400
+WORD_SPACING_RATIO = 0.22
+STROKE = 26
 
 BACKGROUND = color(255, 255, 255)
 
@@ -25,7 +25,6 @@ class TextBox():
     def type(self, c):
         self.string += c
         self.ords[len(self.ords) - 1].append(ALPHABET.index(c))
-        print(self.string, self.ords)
 
     def backspace(self):
         if len(self.string) > 0:
@@ -34,7 +33,6 @@ class TextBox():
             else:
                 self.ords[len(self.ords) - 1].pop()
             self.string = self.string[:len(self.string)-1]
-        print(self.string, self.ords)
     
     def space(self):
         self.ords.append([])
@@ -49,19 +47,21 @@ class TextBox():
         strokeCap(SQUARE)
         max_len = max([len(word) for word in self.ords])
         letter_spacing = max_len + 1
-        max_dim = MAX_DIM
-        word_spacing = max_dim * WORD_SPACING_RATIO
-        total_space = sum([max_dim * (len(word) + 1) / letter_spacing + word_spacing for word in self.ords]) - word_spacing
-        offset = total_space / 2
+        word_spacing = MAX_DIM * WORD_SPACING_RATIO
+        total_space = sum([MAX_DIM * (len(word) + 1) / letter_spacing + word_spacing for word in self.ords]) - word_spacing
+        multiplier = 1
+        if total_space + word_spacing * 2 > WIDTH:
+            multiplier = WIDTH / (total_space + word_spacing * 2)
+        offset = total_space / 2 * multiplier
         spacing = 0
         for word in self.ords:
-            strokeWeight(4. / letter_spacing * STROKE * max_dim / MAX_DIM)
-            total_dim = max_dim * (len(word) + 1) / letter_spacing
+            strokeWeight(4. / letter_spacing * STROKE * multiplier)
+            total_dim = MAX_DIM * (len(word) + 1) / letter_spacing * multiplier
             for i in range(len(word)-1, -1, -1):
                 ord = word[i]
-                dim = max_dim * (i + 2) / letter_spacing
+                dim = MAX_DIM * (i + 2) / letter_spacing * multiplier
                 arc(WIDTH/2 - offset + spacing + total_dim/2, HEIGHT/2, dim, dim, -PI/2 + ord * PI/13 + GAP_SIZE/2, 3*PI/2 + ord * PI/13 - GAP_SIZE/2)
-            spacing += total_dim + word_spacing
+            spacing += total_dim + word_spacing * multiplier
 
 textbox = TextBox(WIDTH/2, HEIGHT - FONT_SIZE)
 

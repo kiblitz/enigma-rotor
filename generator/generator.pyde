@@ -6,7 +6,7 @@ FONT_SIZE = 20
 GAP_SIZE = PI/10
 
 MAX_DIM = 300
-SPACING = 0.75
+WORD_SPACING_RATIO = 0.25
 STROKE = 20
 
 BACKGROUND = color(255, 255, 255)
@@ -47,14 +47,18 @@ class TextBox():
         noFill()
 
         strokeCap(SQUARE)
-        for word in self.ords:
-            spacing = len(word) + 1
-            max_dim = MAX_DIM
-            strokeWeight(4. / (len(word) + 1) * STROKE * max_dim / MAX_DIM)
+        max_len = max([len(word) for word in self.ords])
+        max_dim = MAX_DIM
+        word_spacing = max_dim * WORD_SPACING_RATIO
+        total_space = len(self.ords) * max_dim + (len(self.ords) - 1) * word_spacing
+        offset = total_space / 2 - max_dim / 2
+        for wi, word in enumerate(self.ords):
+            letter_spacing = max_len + 1
+            strokeWeight(4. / letter_spacing * STROKE * max_dim / MAX_DIM)
             for i in range(len(word)-1, -1, -1):
                 ord = word[i]
-                dim = max_dim * (i + 2) / spacing
-                arc(WIDTH/2, HEIGHT/2, dim, dim, -PI/2 + ord * PI/13 + GAP_SIZE/2, 3*PI/2 + ord * PI/13 - GAP_SIZE/2)
+                dim = max_dim * (i + 2) / letter_spacing
+                arc(WIDTH/2 - offset + wi * (max_dim + word_spacing), HEIGHT/2, dim, dim, -PI/2 + ord * PI/13 + GAP_SIZE/2, 3*PI/2 + ord * PI/13 - GAP_SIZE/2)
 
 textbox = TextBox(WIDTH/2, HEIGHT - FONT_SIZE)
 

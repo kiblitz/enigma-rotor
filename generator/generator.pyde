@@ -77,7 +77,7 @@ def draw():
     textbox.draw()
 
 def keyTyped():
-    if key >= 'A' and key <= 'z':
+    if (key >= 'A' and key <= 'Z') or (key >= 'a' and key <= 'z'):
         textbox.type(str(key).lower())
     elif key == BACKSPACE:
         textbox.backspace()
